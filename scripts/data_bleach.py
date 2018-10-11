@@ -13,6 +13,7 @@ PUBLIC_FIELDS = [x.split('.') for x in [
     "sample.biospecimen_type",
     "sample.composition",
     "sample.node_id",
+    "sample.submitter_id",
     "demographic.bmi",
     "demographic.weight",
     "demographic.height",

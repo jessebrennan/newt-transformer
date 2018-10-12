@@ -51,7 +51,10 @@ class Bundle(dict):
         :param linked_field_name: the metadata field that is linked to
         :param link_name: the actual name of the link in the source_field. Usually there is some subtle variation
         """
-        if source_field_name in self.metadata.keys():
+        if linked_field_name == 'program':
+            # Since gen3 export exports a single program, we just grab the only value
+            self.metadata[linked_field_name] = list(metadata_source[linked_field_name].values())[0]
+        elif source_field_name in self.metadata.keys():
             # Get the id of the specific item we want to add
             linked_field_key = self.metadata[source_field_name]['link_fields'][link_name]
             # Get the dictionary that goes with that specific item
@@ -130,7 +133,8 @@ class Gen3Transformer(AbstractTransformer):
                                 MetadataLink('sample', 'case', 'cases.id'),
                                 MetadataLink('case', 'study', 'studies.id#1'),
                                 MetadataLink('demographic', 'case', 'cases.id'),
-                                MetadataLink('study', 'project', 'projects.id')
+                                MetadataLink('study', 'project', 'projects.id'),
+                                MetadataLink('project', 'program', 'id')
                                 ]
 
     def _build_bundle(self, metadata_dict: dict):

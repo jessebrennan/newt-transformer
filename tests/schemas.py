@@ -124,7 +124,7 @@ data_object_schema = {
 data_bundle = {
     "type": "object",
     # TODO: required, but we don't have checksums for bundles
-    'required': ['data_object_ids', 'created', 'updated', 'version'],  # , 'checksums'],
+    'required': ['data_object_ids', 'created', 'updated', 'version', 'user_metadata'],  # , 'checksums'],
     "properties": {
         "id": {
             "type": "string",
@@ -211,8 +211,14 @@ data_bundle = {
         "user_metadata": {
             "type": "object",
             "additionalProperties": True,
-            "description": "OPTIONAL\n"
-                           "A set of key-value pairs that represent metadata provided by the uploader."
+            "description": "REQUIRED\n"
+                           "A set of key-value pairs that represent metadata provided by the uploader.",
+            'required': ['project', 'program'],
+            "properties": {
+                "project": {"type": "object"},
+                "program": {"type": "object"}
+
+            }
         }
     }
 }

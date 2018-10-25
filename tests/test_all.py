@@ -83,7 +83,7 @@ class TestSheepdogGen3TransformingStandard(AbstractTransformerTest, unittest.Tes
 
     def test_sheepdog_gen3_transforming(self):
         message('Run the transformer on sheepdog\'s output')
-        argv = ['new', str(self.test_file), '--output-json', str(self.out_file)]
+        argv = ['new', str(self.test_file), '--output-json', str(self.out_file), '--pp']
         message(f'Passing args: {" ".join(argv)}')
         main(argv)
 

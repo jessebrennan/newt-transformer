@@ -16,9 +16,9 @@ def open_json_file(json_path):
         return json.load(fp)
 
 
-def write_output(bundles: typing.Iterator[Bundle], out_file):
+def write_output(bundles: typing.Iterator[Bundle], out_file, pretty_print):
     with open(out_file, 'w') as fp:
-        json.dump(list(bundles), fp)
+        json.dump(list(bundles), fp, indent=2 if pretty_print else None)
 
 
 def add_parser_to_subparser(sub_parser, parse_name, parse_help):
@@ -29,6 +29,8 @@ def add_parser_to_subparser(sub_parser, parse_name, parse_help):
     parser.add_argument('--output-json', dest='output_json',
                         help='where to write transformed output.', required=False,
                         default='out.json')
+    parser.add_argument('--pp', action='store_true', default=False,
+                        help='pretty print output json.')
 
 
 def main(argv=None):
@@ -61,4 +63,4 @@ def main(argv=None):
         raise ValueError(f'Invalid metadata source format {options.transform_source}')
 
     bundle_iterator = transformer.transform()
-    write_output(bundle_iterator, options.output_json)
+    write_output(bundle_iterator, options.output_json, options.pp)

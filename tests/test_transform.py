@@ -35,7 +35,7 @@ class AbstractTransformerTest:
 
     def _validate_output(self):
         message('Make sure that the output file was actually created')
-        os.path.isfile(str(self.out_file))
+        assert os.path.isfile(str(self.out_file))
 
     def tearDown(self):
         message('Clean up the output file if there is one')

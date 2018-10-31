@@ -31,28 +31,27 @@ class TestDataBleach(unittest.TestCase):
             return json.load(fp)
 
     @staticmethod
-    def _field_is_public(field, sub_field):
-        for public_field, public_sub_field in PUBLIC_FIELDS:
-            if field == public_field:
-                if sub_field == public_sub_field:
-                    return True
-        return False
+    def _field_is_protected(field, sub_field):
+        return not any(field == public_field and sub_field == public_sub_field
+                       for public_field, public_sub_field in PUBLIC_FIELDS)
+
+    @staticmethod
+    def _is_sanitized(value):
+        # These are the values that the sanitizer may set to
+        return value in ['', "--------", False, 0, 0.0, [], None]
 
     def _properly_sanitized(self, metadata):
         for field in metadata:
             if type(metadata[field]) != dict:
                 # the field should be cleared (sanitized)
-                assert not metadata[field]
+                assert self._is_sanitized(metadata[field])
             else:
                 for sub_field in metadata[field]:
-                    if self._field_is_public(field, sub_field):
-                        # public fields have data
-                        assert metadata[field][sub_field]
-                    elif type(metadata[field][sub_field]) != dict:
-                        # TODO: currently, if a dict is a protected field its subfields are still
+                    if self._field_is_protected(field, sub_field) \
+                            and type(metadata[field][sub_field]) != dict:
+                        # TODO: currently, if a dict is a public field its subfields are still
                         # TODO: sanitized. This may not be the desired behavior
-                        # These are the values that the sanitizer may set to
-                        assert metadata[field][sub_field] in ['', "--------", False, 0, 0.0, []]
+                        assert self._is_sanitized(metadata[field][sub_field])
 
     def _validate_output(self):
         # check the output against the agreed upon schema!

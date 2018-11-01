@@ -16,6 +16,39 @@ def open_json_file(json_path):
         return json.load(fp)
 
 
+def _recursive_traversal(d, f):
+    """
+    recursively apply function f to each value in a dictionary
+
+    f takes in the dictionary, the key, and the value
+    """
+    for k, v in d.items():
+        if type(v) == dict:
+            _recursive_traversal(v, f)
+        else:
+            f(d, k, v)
+
+
+def fix_empty_strings(bundle_iterator):
+    """
+    As bundles come through, the metadata is cleaned to replace
+    "" with None
+
+    :param bundle_iterator: An iterator of :class:`Bundle`
+    :return: a bundle iterator
+    """
+    def replace_empty_strings(d, k, v):
+        if v == '':
+            d[k] = None
+    for bundle in bundle_iterator:
+        try:
+            metadata = bundle.metadata
+        except AttributeError:
+            metadata = bundle['metadata']
+        _recursive_traversal(metadata, replace_empty_strings)
+        yield bundle
+
+
 def write_output(bundles: typing.Iterator[Bundle], out_file, pretty_print):
     with open(out_file, 'w') as fp:
         json.dump(list(bundles), fp, indent=2 if pretty_print else None)
@@ -63,4 +96,4 @@ def main(argv=None):
         raise ValueError(f'Invalid metadata source format {options.transform_source}')
 
     bundle_iterator = transformer.transform()
-    write_output(bundle_iterator, options.output_json, options.pp)
+    write_output(fix_empty_strings(bundle_iterator), options.output_json, options.pp)

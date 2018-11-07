@@ -68,6 +68,7 @@ class Bundle(dict):
             # Go to the list of entries we want to look in
             entries = metadata_source[source_field_name]
             # Look for the entry that links to our item
+            linked_field_dict = {}
             for key in entries:
                 entry = entries[key]
                 if entry['link_fields'][link_name] == existing_id:

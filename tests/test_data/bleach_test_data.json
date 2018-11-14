@@ -205,6 +205,10 @@
           "age_at_index": "uJJMcppkwPOIixia",
           "year_of_death": "WhldtwmPtZOLGYYB"
         },
+        "program": {
+          "name": "foo",
+          "code": "bar"
+        },
         "project": {
           "availability_mechanism": "tkFqtGfRPVUQvOwL",
           "availability_type": "qvRWkOdhohoihtbE",
@@ -404,7 +408,7 @@
           "index_date": "xccKBjOZToJlLqQr",
           "label": "WMCDJPYnEQOdtbUH",
           "submitter_id": "BIYwjSWCIndJbMef",
-          "consent_codes": "SKAXjJUYhNtCFbcd",
+          "consent_codes": ["blah", "foo"],
           "eligibility": "GCxGPcfNqNRSRMuL",
           "node_id": "QgnwaQagMLoKJoYT",
           "transplanted_organ": "SUQzImtwxgDQRySJ",
